@@ -60,9 +60,17 @@ const CustomTable = ({ columns, data }: CustomTableProps) => {
           prepareRow(row);
           return (
             <Tr {...row.getRowProps()}>
-              {row.cells.map((cell) => (
-                <Td {...cell.getCellProps()}>{cell.render("Cell")}</Td>
-              ))}
+              {row.cells.map((cell) => {
+                let style = { background: "#E53E3E" };
+                if (row.values.to === "This address") {
+                  style = { background: "#2F855A" };
+                }
+                return (
+                  <Td {...cell.getCellProps({ style })}>
+                    {cell.render("Cell")}
+                  </Td>
+                );
+              })}
             </Tr>
           );
         })}
