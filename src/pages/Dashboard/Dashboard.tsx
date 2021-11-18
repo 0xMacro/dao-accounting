@@ -6,10 +6,14 @@ import { Box } from "@chakra-ui/react";
 import SearchBar from "./SearchBar/SearchBar";
 import TransactionsByAccount from "./TransactionsByAccount/TransactionsByAccount";
 import { useEthers } from "@usedapp/core";
+import Loading from "components/Loading/Loading";
 
 const provider = new ethers.providers.EtherscanProvider();
 
 const Dashboard = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [isFirstRender, setIsFirstRender] = useState(true);
+  const [noTransactions, setNoTransactions] = useState(false);
   const [inputAccount, setInputAccount] = useState("");
   const [transactions, setTransactions] = useState<TransactionResponse[]>([]);
   const { account } = useEthers();
@@ -17,8 +21,13 @@ const Dashboard = () => {
 
   const searchForTransactions = useCallback(
     async (_account: string) => {
+      setIsLoading(true);
+      setNoTransactions(false);
       try {
         const txList = await provider.getHistory(_account);
+        if (txList.length === 0) {
+          return setNoTransactions(true);
+        }
         setTransactions(txList);
       } catch (_e) {
         toast({
@@ -27,6 +36,8 @@ const Dashboard = () => {
           duration: 5000,
           isClosable: true,
         });
+      } finally {
+        setIsLoading(false);
       }
     },
     [toast]
@@ -34,26 +45,27 @@ const Dashboard = () => {
 
   // If a wallet is connected and there's nothing on the search bar, get the transactions for the connected account
 
-  /**
-   * Here we remove the linter's warning about the dependencies because we only want
-   * this hook to run once or if "account" changes, we don't care about the other used
-   * variables
-   */
   useEffect(() => {
-    if (account && !inputAccount) {
+    if (account && isFirstRender) {
+      setIsLoading(true);
+      setIsFirstRender(false);
       searchForTransactions(account);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [account]);
+  }, [account, isFirstRender, searchForTransactions]);
 
   return (
-    <Box>
-      <SearchBar
-        inputAccount={inputAccount}
-        setInputAccount={setInputAccount}
-        searchForTransactions={searchForTransactions}
-      />
-      <TransactionsByAccount transactions={transactions} />
+    <Box m="auto">
+      <Loading isLoading={isLoading}>
+        <SearchBar
+          inputAccount={inputAccount}
+          setInputAccount={setInputAccount}
+          searchForTransactions={searchForTransactions}
+        />
+        <TransactionsByAccount
+          noTransactions={noTransactions}
+          transactions={transactions}
+        />
+      </Loading>
     </Box>
   );
 };
