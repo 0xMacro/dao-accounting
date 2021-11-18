@@ -20,7 +20,7 @@ const CustomTable = ({ columns, data }: CustomTableProps) => {
   const {
     getTableProps,
     getTableBodyProps,
-    headers,
+    headerGroups,
     prepareRow,
     page, // Instead of using 'rows', we'll use page,
     // which has only the rows for the active page
@@ -47,8 +47,12 @@ const CustomTable = ({ columns, data }: CustomTableProps) => {
   return (
     <Table {...getTableProps()}>
       <Thead>
-        {headers.map((header) => (
-          <Th>{header.Header}</Th>
+        {headerGroups.map((headerGroup) => (
+          <Tr {...headerGroup.getHeaderGroupProps()}>
+            {headerGroup.headers.map((column) => (
+              <Th {...column.getHeaderProps()}>{column.render("Header")}</Th>
+            ))}
+          </Tr>
         ))}
       </Thead>
       <Tbody {...getTableBodyProps()}>

@@ -13,7 +13,7 @@ const SearchBar = ({
   searchForTransactions,
 }: SearchBarProps) => {
   const handleInputChange = (e: any) => {
-    setInputAccount(e.target.value);
+    setInputAccount(e.target.value.trim());
   };
 
   const handleSearchClick = () => {

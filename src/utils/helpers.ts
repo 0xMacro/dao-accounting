@@ -7,15 +7,22 @@ export const trimAccount = (string: string) => {
 };
 
 export const fixUpTransactionData = (
-  transactions: TransactionResponse[]
+  transactions: TransactionResponse[],
+  account: string
 ): (Transaction | undefined)[] => {
   return transactions
     .map((tx: TransactionResponse) => {
       if (tx.value.gt(0) && tx.to) {
         return {
           hash: trimAccount(tx.hash),
-          from: trimAccount(tx.from),
-          to: trimAccount(tx.to!),
+          from:
+            tx.from.toUpperCase() === account.toUpperCase()
+              ? "This address"
+              : trimAccount(tx.from),
+          to:
+            tx.to.toUpperCase() === account.toUpperCase()
+              ? "This address"
+              : trimAccount(tx.to),
           value: ethers.utils.formatEther(tx.value),
         };
       }

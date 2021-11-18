@@ -31,7 +31,7 @@ const Dashboard = () => {
         if (txList.length === 0) {
           return setNoTransactions(true);
         }
-        const cleanTransactions = fixUpTransactionData(txList);
+        const cleanTransactions = fixUpTransactionData(txList, _account);
 
         setTransactions(cleanTransactions);
       } catch (_e) {
