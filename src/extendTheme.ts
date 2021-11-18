@@ -1,15 +1,16 @@
-import { extendTheme, withDefaultColorScheme } from "@chakra-ui/react";
+import { extendTheme, ThemeConfig } from "@chakra-ui/react";
 
-const theme = extendTheme(
-  {
-    fonts: {
-      heading: "Roboto",
-      body: "Roboto",
-    },
+const config: ThemeConfig = {
+  initialColorMode: "dark",
+  useSystemColorMode: false,
+};
+
+const theme = extendTheme({
+  config,
+  fonts: {
+    heading: "Roboto",
+    body: "Roboto",
   },
-  withDefaultColorScheme({
-    colorScheme: "telegram",
-  })
-);
+});
 
 export default theme;

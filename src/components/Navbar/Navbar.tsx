@@ -11,11 +11,11 @@ const Navbar = () => {
   };
 
   return (
-    <Flex py={4} px={10} justify="space-between" align="center" boxShadow="md">
+    <Flex py={4} px={10} justify="space-between" align="center" boxShadow="lg">
       <Box fontSize="xl" fontWeight="bold">
         DAO Finance
       </Box>
-      
+
       {account ? (
         <Text fontSize="lg" fontWeight="bold">
           {trimAccount(account)}
