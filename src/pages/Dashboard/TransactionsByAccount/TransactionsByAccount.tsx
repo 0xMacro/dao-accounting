@@ -1,9 +1,10 @@
 import React from "react";
-import { TransactionResponse } from "@ethersproject/abstract-provider";
+import { Transaction } from "types";
 import { Flex, Text } from "@chakra-ui/react";
+import TransactionsTableView from "./TransactionsTableView";
 
 type TransactionsByAccountProps = {
-  transactions: TransactionResponse[];
+  transactions: (Transaction | undefined)[];
   noTransactions: boolean;
 };
 
@@ -21,11 +22,7 @@ const TransactionsByAccount = ({
 
   return (
     <Flex mt={10} justify="center">
-      <ul>
-        {transactions.map((tx) => (
-          <li>{tx.hash}</li>
-        ))}
-      </ul>
+      <TransactionsTableView transactions={transactions} />
     </Flex>
   );
 };

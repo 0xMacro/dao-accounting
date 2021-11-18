@@ -1,19 +1,17 @@
-import React from "react";
-import {
-  Table,
-  Thead,
-  Tbody,
-  Tfoot,
-  Tr,
-  Th,
-  Td,
-  TableCaption,
-} from "@chakra-ui/react";
+import React, { useMemo } from "react";
+import CustomTable from "components/Table/CustomTable";
+import columns from "./columnData";
+import { Transaction } from "types";
 
-const TransactionsTableView = () => {
-  return <Table>
-    
-  </Table>;
+type TransactionTableProps = {
+  transactions: (Transaction | undefined)[];
+};
+
+const TransactionsTableView = ({ transactions }: TransactionTableProps) => {
+  const memoizedColumns = useMemo(columns, []);
+  const memoizedTransactions = useMemo(() => transactions, []);
+
+  return <CustomTable columns={memoizedColumns} data={memoizedTransactions} />;
 };
 
 export default TransactionsTableView;
