@@ -1,9 +1,5 @@
-import React, {
-  ChangeEvent,
-  ChangeEventHandler,
-  MouseEventHandler,
-} from "react";
-import { Button, InputGroup, InputRightElement, Input } from "@chakra-ui/react";
+import React from "react";
+import { Button, Flex, Input } from "@chakra-ui/react";
 
 type SearchBarProps = {
   inputAccount: string;
@@ -16,33 +12,25 @@ const SearchBar = ({
   setInputAccount,
   searchForTransactions,
 }: SearchBarProps) => {
-  const handleInputChange: ChangeEventHandler<HTMLInputElement> = (
-    e: ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleInputChange = (e: any) => {
     setInputAccount(e.target.value);
   };
 
-  const handleSearchClick: MouseEventHandler<HTMLButtonElement> = () => {
+  const handleSearchClick = () => {
     searchForTransactions(inputAccount);
   };
 
   return (
-    <div>
-      <InputGroup
-        m="auto"
-        size="md"
-        width={{ base: "100%", md: "75%", lg: "50%" }}
-      >
-        <Input
-          value={inputAccount}
-          onChange={handleInputChange}
-          placeholder="Search address..."
-        />
-        <InputRightElement width="5rem">
-          <Button onClick={handleSearchClick}>Search</Button>
-        </InputRightElement>
-      </InputGroup>
-    </div>
+    <Flex m="auto" size="md" width={{ base: "100%", md: "75%", lg: "50%" }}>
+      <Input
+        value={inputAccount}
+        onChange={handleInputChange}
+        placeholder="Search address..."
+      />
+      <Button ml={3} onClick={handleSearchClick}>
+        Search
+      </Button>
+    </Flex>
   );
 };
 

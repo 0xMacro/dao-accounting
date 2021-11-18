@@ -6,7 +6,7 @@ import Dashboard from "./Dashboard/Dashboard";
 const MainRouter = () => {
   return (
     <Router>
-      <Box p={10} bg="gray.700" w="full">
+      <Box p={{ base: 5, sm: 10 }} bg="gray.700" w="full">
         <Routes>
           <Route path="/" element={<Dashboard />} />
         </Routes>

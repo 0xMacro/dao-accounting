@@ -13,7 +13,7 @@ const TransactionsByAccount = ({
 }: TransactionsByAccountProps) => {
   if (noTransactions) {
     return (
-      <Flex mt={10} justify="center">
+      <Flex textAlign="center" mt={10} justify="center">
         <Text fontSize="lg">No transactions found for this address!</Text>
       </Flex>
     );
