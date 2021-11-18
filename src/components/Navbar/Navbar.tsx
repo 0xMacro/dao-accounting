@@ -11,7 +11,14 @@ const Navbar = () => {
   };
 
   return (
-    <Flex py={4} px={10} justify="space-between" align="center" boxShadow="lg">
+    <Flex
+      py={4}
+      px={10}
+      justify="space-between"
+      align="center"
+      bg="gray.800"
+      boxShadow="lg"
+    >
       <Box fontSize="xl" fontWeight="bold">
         DAO Finance
       </Box>

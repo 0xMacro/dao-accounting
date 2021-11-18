@@ -1,10 +1,14 @@
-import React, { ChangeEvent, ChangeEventHandler } from "react";
+import React, {
+  ChangeEvent,
+  ChangeEventHandler,
+  MouseEventHandler,
+} from "react";
 import { Button, InputGroup, InputRightElement, Input } from "@chakra-ui/react";
 
 type SearchBarProps = {
   inputAccount: string;
   setInputAccount: React.Dispatch<React.SetStateAction<string>>;
-  searchForTransactions: () => void;
+  searchForTransactions: (_account: string) => void;
 };
 
 const SearchBar = ({
@@ -16,6 +20,10 @@ const SearchBar = ({
     e: ChangeEvent<HTMLInputElement>
   ) => {
     setInputAccount(e.target.value);
+  };
+
+  const handleSearchClick: MouseEventHandler<HTMLButtonElement> = () => {
+    searchForTransactions(inputAccount);
   };
 
   return (
@@ -31,7 +39,7 @@ const SearchBar = ({
           placeholder="Search address..."
         />
         <InputRightElement width="5rem">
-          <Button onClick={searchForTransactions}>Search</Button>
+          <Button onClick={handleSearchClick}>Search</Button>
         </InputRightElement>
       </InputGroup>
     </div>
