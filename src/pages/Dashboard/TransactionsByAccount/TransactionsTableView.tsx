@@ -11,7 +11,21 @@ const TransactionsTableView = ({ transactions }: TransactionTableProps) => {
   const memoizedColumns = useMemo(columns, []);
   const memoizedTransactions = useMemo(() => transactions, []);
 
-  return <CustomTable columns={memoizedColumns} data={memoizedTransactions} />;
+  const getRowStyles = (row: any) => {
+    let style = { background: "#E53E3E" };
+    if (row.values.to === "This address") {
+      style = { background: "#2F855A" };
+    }
+    return style;
+  };
+
+  return (
+    <CustomTable
+      columns={memoizedColumns}
+      data={memoizedTransactions}
+      getRowStyles={getRowStyles}
+    />
+  );
 };
 
 export default TransactionsTableView;

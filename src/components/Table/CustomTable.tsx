@@ -14,9 +14,10 @@ import {
 type CustomTableProps = {
   columns: any;
   data: any;
+  getRowStyles: (row: any) => any;
 };
 
-const CustomTable = ({ columns, data }: CustomTableProps) => {
+const CustomTable = ({ columns, data, getRowStyles }: CustomTableProps) => {
   const {
     getTableProps,
     getTableBodyProps,
@@ -61,10 +62,7 @@ const CustomTable = ({ columns, data }: CustomTableProps) => {
           return (
             <Tr {...row.getRowProps()}>
               {row.cells.map((cell) => {
-                let style = { background: "#E53E3E" };
-                if (row.values.to === "This address") {
-                  style = { background: "#2F855A" };
-                }
+                const style = getRowStyles(row);
                 return (
                   <Td {...cell.getCellProps({ style })}>
                     {cell.render("Cell")}
