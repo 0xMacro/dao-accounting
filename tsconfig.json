@@ -1,12 +1,8 @@
 {
   "compilerOptions": {
-    "baseUrl": "src",
+    "baseUrl": "./",
     "target": "es5",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -19,9 +15,17 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "preserve",
+    "incremental": true
   },
   "include": [
-    "src"
-  ]
+    "types.ts",
+    "extendTheme.ts",
+    "dappConfig.ts",
+    "utils",
+    "react-app-env.d.ts",
+    "react-table-config.d.ts",
+    "components"
+  ],
+  "exclude": ["node_modules"]
 }

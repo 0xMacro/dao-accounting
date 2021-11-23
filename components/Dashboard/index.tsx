@@ -6,7 +6,7 @@ import { Box } from "@chakra-ui/react";
 import SearchBar from "./SearchBar/SearchBar";
 import TransactionsByAccount from "./TransactionsByAccount/TransactionsByAccount";
 import { useEthers } from "@usedapp/core";
-import Loading from "components/Loading/Loading";
+import Loading from "components/Loading";
 import { fixUpTransactionData } from "utils/helpers";
 
 const provider = new ethers.providers.EtherscanProvider();

@@ -1,7 +1,7 @@
 import React from "react";
 import { Flex, Box, Button, Text } from "@chakra-ui/react";
 import { useEthers } from "@usedapp/core";
-import { trimAccount } from "utils/helpers";
+import { trimAccount } from "../utils/helpers";
 
 const Navbar = () => {
   const { account, activateBrowserWallet } = useEthers();

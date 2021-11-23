@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import CustomTable from "components/Table/CustomTable";
+import CustomTable from "components/CustomTable";
 import columns from "./columnData";
 import { Transaction } from "types";
 

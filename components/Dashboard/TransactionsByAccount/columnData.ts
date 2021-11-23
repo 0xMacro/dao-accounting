@@ -15,6 +15,10 @@ const columns = () => [
     Header: "Amount",
     accessor: "value",
   },
+  {
+    Header: "Category",
+    accessor: "category",
+  },
 ];
 
 export default columns;
