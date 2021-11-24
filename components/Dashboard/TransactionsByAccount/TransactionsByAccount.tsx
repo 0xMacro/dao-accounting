@@ -5,24 +5,19 @@ import TransactionsTableView from "./TransactionsTableView";
 
 type TransactionsByAccountProps = {
   transactions: (Transaction | undefined)[];
-  noTransactions: boolean;
+  inputAccount: string;
 };
 
 const TransactionsByAccount = ({
   transactions,
-  noTransactions,
+  inputAccount,
 }: TransactionsByAccountProps) => {
-  if (noTransactions) {
-    return (
-      <Flex textAlign="center" mt={10} justify="center">
-        <Text fontSize="lg">No transactions found for this address!</Text>
-      </Flex>
-    );
-  }
-
   return (
     <Flex mt={10} justify="center">
-      <TransactionsTableView transactions={transactions} />
+      <TransactionsTableView
+        inputAccount={inputAccount}
+        transactions={transactions}
+      />
     </Flex>
   );
 };

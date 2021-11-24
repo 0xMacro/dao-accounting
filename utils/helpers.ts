@@ -14,15 +14,9 @@ export const fixUpTransactionData = (
     .map((tx: TransactionResponse) => {
       if (tx.value.gt(0) && tx.to) {
         return {
-          hash: trimAccount(tx.hash),
-          from:
-            tx.from.toUpperCase() === account.toUpperCase()
-              ? "This address"
-              : trimAccount(tx.from),
-          to:
-            tx.to.toUpperCase() === account.toUpperCase()
-              ? "This address"
-              : trimAccount(tx.to),
+          hash: tx.hash,
+          from: tx.from,
+          to: tx.to,
           value: ethers.utils.formatEther(tx.value),
         };
       }
