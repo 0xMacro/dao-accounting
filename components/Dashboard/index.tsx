@@ -11,7 +11,7 @@ import { fixUpTransactionData } from "utils/helpers";
 
 const provider = new ethers.providers.EtherscanProvider();
 
-const Dashboard = ({categories}: any) => {
+const Dashboard = ({ categories }: any) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isFirstRender, setIsFirstRender] = useState(true);
   const [noTransactions, setNoTransactions] = useState(false);
@@ -21,8 +21,6 @@ const Dashboard = ({categories}: any) => {
   );
   const { account } = useEthers();
   const toast = useToast();
-
-  console.log(categories)
 
   const searchForTransactions = useCallback(
     async (_account: string) => {

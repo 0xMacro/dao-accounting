@@ -1,15 +1,7 @@
 import React from "react";
 import { useTable, usePagination } from "react-table";
-import {
-  Table,
-  Thead,
-  Tbody,
-  Tfoot,
-  Tr,
-  Th,
-  Td,
-  TableCaption,
-} from "@chakra-ui/react";
+import Pagination from "./Pagination";
+import { Table, Thead, Tbody, Tr, Th, Td, Flex } from "@chakra-ui/react";
 
 type CustomTableProps = {
   columns: any;
@@ -23,10 +15,7 @@ const CustomTable = ({ columns, data, getRowStyles }: CustomTableProps) => {
     getTableBodyProps,
     headerGroups,
     prepareRow,
-    page, // Instead of using 'rows', we'll use page,
-    // which has only the rows for the active page
-
-    // The rest of these things are super handy, too ;)
+    page,
     canPreviousPage,
     canNextPage,
     pageOptions,
@@ -34,46 +23,61 @@ const CustomTable = ({ columns, data, getRowStyles }: CustomTableProps) => {
     gotoPage,
     nextPage,
     previousPage,
-    setPageSize,
-    state: { pageIndex, pageSize },
+    state: { pageIndex },
   } = useTable(
     {
       columns,
       data,
-      initialState: { pageIndex: 0, pageSize: 10 },
+      initialState: { pageIndex: 0 },
     },
     usePagination
   );
 
   return (
-    <Table {...getTableProps()}>
-      <Thead>
-        {headerGroups.map((headerGroup) => (
-          <Tr {...headerGroup.getHeaderGroupProps()}>
-            {headerGroup.headers.map((column) => (
-              <Th {...column.getHeaderProps()}>{column.render("Header")}</Th>
+    <Flex direction="column" w={{ base: "100%", lg: "75%" }}>
+      <Flex maxWidth="100%" overflow="auto">
+        <Table {...getTableProps()}>
+          <Thead>
+            {headerGroups.map((headerGroup) => (
+              <Tr {...headerGroup.getHeaderGroupProps()}>
+                {headerGroup.headers.map((column) => (
+                  <Th {...column.getHeaderProps()}>
+                    {column.render("Header")}
+                  </Th>
+                ))}
+              </Tr>
             ))}
-          </Tr>
-        ))}
-      </Thead>
-      <Tbody {...getTableBodyProps()}>
-        {page.map((row) => {
-          prepareRow(row);
-          return (
-            <Tr {...row.getRowProps()}>
-              {row.cells.map((cell) => {
-                const style = getRowStyles(row);
-                return (
-                  <Td {...cell.getCellProps({ style })}>
-                    {cell.render("Cell")}
-                  </Td>
-                );
-              })}
-            </Tr>
-          );
-        })}
-      </Tbody>
-    </Table>
+          </Thead>
+          <Tbody {...getTableBodyProps()}>
+            {page.map((row) => {
+              prepareRow(row);
+              return (
+                <Tr {...row.getRowProps()}>
+                  {row.cells.map((cell) => {
+                    const style = getRowStyles(row);
+                    return (
+                      <Td {...cell.getCellProps({ style })}>
+                        {cell.render("Cell")}
+                      </Td>
+                    );
+                  })}
+                </Tr>
+              );
+            })}
+          </Tbody>
+        </Table>
+      </Flex>
+      <Pagination
+        gotoPage={gotoPage}
+        canPreviousPage={canPreviousPage}
+        canNextPage={canNextPage}
+        previousPage={previousPage}
+        nextPage={nextPage}
+        pageIndex={pageIndex}
+        pageCount={pageCount}
+        pageOptions={pageOptions}
+      />
+    </Flex>
   );
 };
 
