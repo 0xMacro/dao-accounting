@@ -5,7 +5,7 @@ import config from "../dappConfig";
 import theme from "../extendTheme";
 import "@fontsource/roboto";
 import "../styles/globals.css";
-import Layout from "../components/layout";
+import Layout from "../components/Layout";
 
 export default function DAOFinanceApp({ Component, pageProps }) {
   return (
