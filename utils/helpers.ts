@@ -8,7 +8,6 @@ export const trimAccount = (string: string) => {
 
 export const fixUpTransactionData = (
   transactions: TransactionResponse[],
-  account: string,
   categories: Category[]
 ): (Transaction | undefined)[] => {
   return transactions

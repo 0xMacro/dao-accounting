@@ -39,11 +39,7 @@ const Dashboard = () => {
         const response = await fetch(`/api/getCategories/${_account}`);
         const { categories } = await response.json();
 
-        const cleanTransactions = fixUpTransactionData(
-          txList,
-          _account,
-          categories
-        );
+        const cleanTransactions = fixUpTransactionData(txList, categories);
 
         setTransactions(cleanTransactions);
       } catch (_e) {
