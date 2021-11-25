@@ -1,29 +1,25 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button, Flex, Input } from "@chakra-ui/react";
 
 type SearchBarProps = {
-  inputAccount: string;
-  setInputAccount: React.Dispatch<React.SetStateAction<string>>;
   searchForTransactions: (_account: string) => void;
 };
 
-const SearchBar = ({
-  inputAccount,
-  setInputAccount,
-  searchForTransactions,
-}: SearchBarProps) => {
+const SearchBar = ({ searchForTransactions }: SearchBarProps) => {
+  const [typingAccount, setTypingAccount] = useState("");
+
   const handleInputChange = (e: any) => {
-    setInputAccount(e.target.value.trim());
+    setTypingAccount(e.target.value.trim());
   };
 
   const handleSearchClick = () => {
-    searchForTransactions(inputAccount);
+    searchForTransactions(typingAccount);
   };
 
   return (
     <Flex m="auto" size="md" width={{ base: "100%", md: "75%", lg: "50%" }}>
       <Input
-        value={inputAccount}
+        value={typingAccount}
         onChange={handleInputChange}
         placeholder="Search address..."
       />

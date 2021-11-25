@@ -3,6 +3,7 @@ import { Link } from "@chakra-ui/react";
 import { trimAccount } from "utils/helpers";
 import AddressCell from "./AddressCell";
 import Category from "./Category";
+import ValueCell from "./ValueCell";
 
 const columns = () => [
   {
@@ -31,15 +32,22 @@ const columns = () => [
   {
     Header: "Amount",
     accessor: "value",
-    Cell: ({ value }: any) => `${value} ETH`,
+    Cell: ({ value, row, extraProps }: any) => (
+      <ValueCell
+        value={value}
+        from={row.original.from}
+        inputAccount={extraProps.inputAccount}
+      />
+    ),
   },
   {
     Header: "Category",
     accessor: "category",
-    Cell: ({ row, value, extraProps }: any) => (
+    Cell: ({ value, extraProps }: any) => (
       <Category
         value={value}
-        extraProps={{ ...extraProps, hash: row.original.hash }}
+        inputAccount={extraProps.inputAccount}
+        hash={extraProps.hash}
       />
     ),
   },

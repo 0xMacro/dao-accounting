@@ -23,6 +23,7 @@ const Dashboard = () => {
 
   const searchForTransactions = useCallback(
     async (_account: string) => {
+      setInputAccount(_account);
       setIsLoading(true);
       setTransactions([]);
       try {
@@ -70,11 +71,7 @@ const Dashboard = () => {
   return (
     <Box m="auto">
       <Loading isLoading={isLoading}>
-        <SearchBar
-          inputAccount={inputAccount}
-          setInputAccount={setInputAccount}
-          searchForTransactions={searchForTransactions}
-        />
+        <SearchBar searchForTransactions={searchForTransactions} />
         {transactions.length ? (
           <TransactionsByAccount
             inputAccount={inputAccount}

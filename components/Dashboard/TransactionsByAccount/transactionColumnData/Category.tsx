@@ -4,11 +4,10 @@ import { Input, useToast } from "@chakra-ui/react";
 import { trimAccount } from "utils/helpers";
 import { useEthers } from "@usedapp/core";
 
-const Category = ({ value, extraProps }: any) => {
+const Category = ({ value, inputAccount, hash }: any) => {
   const [isLoading, setIsLoading] = useState(false);
   const [categoryName, setCategoryName] = useState(value?.name);
   const toast = useToast();
-  const { inputAccount, hash } = extraProps;
   const { account } = useEthers();
 
   const handleChangeCategory = (e: any) => {
@@ -62,7 +61,7 @@ const Category = ({ value, extraProps }: any) => {
   return (
     <Loading align="left" size="lg" isLoading={isLoading}>
       <Input
-        readOnly={inputAccount.toLowerCase() !== account}
+        readOnly={inputAccount.toLowerCase() !== account?.toLowerCase()}
         w={60}
         value={categoryName}
         onChange={handleChangeCategory}
