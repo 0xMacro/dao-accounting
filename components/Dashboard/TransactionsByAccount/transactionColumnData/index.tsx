@@ -43,11 +43,11 @@ const columns = () => [
   {
     Header: "Category",
     accessor: "category",
-    Cell: ({ value, extraProps }: any) => (
+    Cell: ({ value, row, extraProps }: any) => (
       <Category
         value={value}
         inputAccount={extraProps.inputAccount}
-        hash={extraProps.hash}
+        hash={row.original.hash}
       />
     ),
   },
