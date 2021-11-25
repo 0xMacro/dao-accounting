@@ -1,8 +1,8 @@
 import { ethers } from "ethers";
-import { getSession } from "../../../utils/get-session";
-import { prisma } from "../../../db";
+import { prisma } from "../../../config/db";
+import { withSessionRoute } from "../../../lib/withSession";
 
-export default async function handler(req, res) {
+export default withSessionRoute(async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(400).json({ status: 0, error: "Method not supported" });
   }
@@ -11,13 +11,13 @@ export default async function handler(req, res) {
   const actualNonce = await getNonce(account);
 
   // Validate nonce and signature
-  if (nonce !== actualNonce) {
+  if (nonce !== String(actualNonce)) {
     return res.status(400).json({ isValid: false, reason: "Bad nonce" });
   }
 
   try {
     const signer = ethers.utils.verifyMessage(
-      `dao_accounting:${actualNonce}`,
+      `dao_accounting:${actualNonce || 0}`,
       sig
     );
 
@@ -33,10 +33,11 @@ export default async function handler(req, res) {
   //Upsert user and set session variables
   createOrUpdateUser(account);
 
-  const session = await getSession(req, res);
-  session.connectedAddress = req.body.account;
+  // req.session.connectedAddress = req.body.account;
+  req.session.connectedAddress = req.body.account;
+  await req.session.save();
   res.status(200).json({ status: 1 });
-}
+});
 
 const getNonce = async (address: string) => {
   const dbResponse = await prisma.users.findFirst({
@@ -48,8 +49,8 @@ const getNonce = async (address: string) => {
     },
   });
 
-  const { nonce } = dbResponse;
-  return String(nonce);
+  const nonce = dbResponse?.nonce;
+  return nonce;
 };
 
 const createOrUpdateUser = async (address: string) => {

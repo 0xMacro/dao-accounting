@@ -20,8 +20,8 @@
   },
   "include": [
     "types.ts",
-    "extendTheme.ts",
-    "dappConfig.ts",
+    "config/extendTheme.ts",
+    "config/dappConfig.ts",
     "utils",
     "react-app-env.d.ts",
     "react-table-config.d.ts",

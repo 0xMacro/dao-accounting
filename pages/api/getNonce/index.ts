@@ -1,4 +1,4 @@
-import { prisma } from "../../../db";
+import { prisma } from "../../../config/db";
 
 export default async function handler(req, res) {
   const address = req.query.address;
@@ -11,6 +11,6 @@ export default async function handler(req, res) {
     },
   });
 
-  const { nonce } = dbResponse;
+  const nonce = dbResponse?.nonce;
   res.status(200).json({ nonce });
 }

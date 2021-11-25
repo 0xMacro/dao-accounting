@@ -3,7 +3,7 @@ import { JsonRpcSigner } from "@ethersproject/providers";
 export async function signTransaction(signer: JsonRpcSigner, address: string) {
   const nonce = await getNonce(address);
   const sig = await signer.signMessage(`dao_accounting:${nonce || 0}`);
-  await signInToBackend(address, sig, nonce);
+  await signInToBackend(address, sig, String(nonce));
 }
 
 export async function signInToBackend(
