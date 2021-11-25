@@ -9,7 +9,7 @@ export default async function handler(req, res) {
 
   const userQueryResponse = await prisma.users.upsert({
     where: {
-      address: queriedAddress as string,
+      address: queriedAddress.toLowerCase() as string,
     },
     create: {
       address: queriedAddress.toLowerCase(),

@@ -24,6 +24,7 @@ const Dashboard = () => {
   const searchForTransactions = useCallback(
     async (_account: string) => {
       setIsLoading(true);
+      setTransactions([]);
       try {
         const txList = await provider.getHistory(_account);
         if (txList.length === 0) {

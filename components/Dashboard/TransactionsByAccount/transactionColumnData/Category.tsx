@@ -2,12 +2,14 @@ import { useState } from "react";
 import Loading from "components/Loading";
 import { Input, useToast } from "@chakra-ui/react";
 import { trimAccount } from "utils/helpers";
+import { useEthers } from "@usedapp/core";
 
 const Category = ({ value, extraProps }: any) => {
   const [isLoading, setIsLoading] = useState(false);
   const [categoryName, setCategoryName] = useState(value?.name);
   const toast = useToast();
   const { inputAccount, hash } = extraProps;
+  const { account } = useEthers();
 
   const handleChangeCategory = (e: any) => {
     setCategoryName(e.target.value);
@@ -24,20 +26,25 @@ const Category = ({ value, extraProps }: any) => {
           name: categoryName,
         };
 
-        await fetch("/api/saveCategory", {
+        const response = await fetch("/api/saveCategory", {
           method: "POST",
           body: JSON.stringify(body),
           headers: {
             "Content-Type": "application/json",
           },
         });
-        toast({
-          title: `Category for ${trimAccount(hash)} updated!`,
-          status: "success",
-          duration: 5000,
-          isClosable: true,
-          position: "top",
-        });
+        const data = await response.json();
+        if (data.status) {
+          toast({
+            title: `Category for ${trimAccount(hash)} updated!`,
+            status: "success",
+            duration: 5000,
+            isClosable: true,
+            position: "top",
+          });
+        } else {
+          throw new Error("Saving category failed");
+        }
       } catch (e) {
         toast({
           title: "There was an error saving the category.",
@@ -55,6 +62,7 @@ const Category = ({ value, extraProps }: any) => {
   return (
     <Loading align="left" size="lg" isLoading={isLoading}>
       <Input
+        readOnly={inputAccount.toLowerCase() !== account}
         w={60}
         value={categoryName}
         onChange={handleChangeCategory}
