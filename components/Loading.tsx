@@ -6,12 +6,13 @@ type LoadingProps = {
   isLoading: boolean;
   size?: string;
   align?: string;
+  py?: number;
 };
 
-const Loading = ({ children, isLoading, size, align }: LoadingProps) => {
+const Loading = ({ children, isLoading, size, align, py }: LoadingProps) => {
   if (isLoading) {
     return (
-      <Flex justify={align || "center"} align="center">
+      <Flex py={py || 1} justify={align || "center"} align="center">
         <Spinner size={size || "xl"} />
       </Flex>
     );

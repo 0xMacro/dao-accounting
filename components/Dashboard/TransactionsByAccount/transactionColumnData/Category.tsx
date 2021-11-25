@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Loading from "components/Loading";
-import { Input } from "@chakra-ui/input";
+import { Input } from "@chakra-ui/react";
 
 const Category = ({ value }: any) => {
   const [isLoading, setIsLoading] = useState(false);
