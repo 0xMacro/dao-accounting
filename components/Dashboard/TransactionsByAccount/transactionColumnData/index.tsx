@@ -36,7 +36,12 @@ const columns = () => [
   {
     Header: "Category",
     accessor: "category",
-    Cell: ({ value }: any) => <Category value={value} />,
+    Cell: ({ row, value, extraProps }: any) => (
+      <Category
+        value={value}
+        extraProps={{ ...extraProps, hash: row.original.hash }}
+      />
+    ),
   },
 ];
 

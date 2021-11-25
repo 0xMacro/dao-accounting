@@ -15,7 +15,13 @@ const TransactionsTableView = ({
   const memoizedColumns = useMemo(columns, []);
   const memoizedTransactions = useMemo(() => transactions, []);
 
-  return <CustomTable columns={memoizedColumns} data={memoizedTransactions} />;
+  return (
+    <CustomTable
+      columns={memoizedColumns}
+      data={memoizedTransactions}
+      inputAccount={inputAccount}
+    />
+  );
 };
 
 export default TransactionsTableView;

@@ -9,7 +9,7 @@ export default withSessionRoute(async function handler(req, res) {
   const { address, hash, name } = req.body;
   const connectedAddress = req.session.connectedAddress;
 
-  if (address !== connectedAddress) {
+  if (address.toLowerCase() !== connectedAddress.toLowerCase()) {
     return res.status(401).json({ status: 0, error: "Unauthorized" });
   }
 

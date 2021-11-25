@@ -6,9 +6,10 @@ import { Table, Thead, Tbody, Tr, Th, Td, Flex } from "@chakra-ui/react";
 type CustomTableProps = {
   columns: any;
   data: any;
+  inputAccount: string;
 };
 
-const CustomTable = ({ columns, data }: CustomTableProps) => {
+const CustomTable = ({ columns, data, inputAccount }: CustomTableProps) => {
   const {
     getTableProps,
     getTableBodyProps,
@@ -51,10 +52,16 @@ const CustomTable = ({ columns, data }: CustomTableProps) => {
             {page.map((row) => {
               prepareRow(row);
               return (
-                <Tr  {...row.getRowProps()}>
+                <Tr {...row.getRowProps()}>
                   {row.cells.map((cell) => {
                     return (
-                      <Td py={3} borderColor="gray.600" {...cell.getCellProps()}>{cell.render("Cell")}</Td>
+                      <Td
+                        py={3}
+                        borderColor="gray.600"
+                        {...cell.getCellProps()}
+                      >
+                        {cell.render("Cell", { extraProps: { inputAccount } })}
+                      </Td>
                     );
                   })}
                 </Tr>
