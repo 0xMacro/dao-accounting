@@ -4,3 +4,8 @@ export type Transaction = {
   to: string | undefined;
   value: string;
 };
+
+export type Category = {
+  hash: string;
+  name: string;
+};

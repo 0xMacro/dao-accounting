@@ -1,6 +1,6 @@
 import { TransactionResponse } from "@ethersproject/abstract-provider";
 import { ethers } from "ethers";
-import { Transaction } from "types";
+import { Category, Transaction } from "types";
 
 export const trimAccount = (string: string) => {
   return string.slice(0, 4) + "..." + string.slice(string.length - 4);
@@ -8,7 +8,8 @@ export const trimAccount = (string: string) => {
 
 export const fixUpTransactionData = (
   transactions: TransactionResponse[],
-  account: string
+  account: string,
+  categories: Category[]
 ): (Transaction | undefined)[] => {
   return transactions
     .map((tx: TransactionResponse) => {
@@ -18,6 +19,7 @@ export const fixUpTransactionData = (
           from: tx.from,
           to: tx.to,
           value: ethers.utils.formatEther(tx.value),
+          category: categories.find((category) => category.hash === tx.hash),
         };
       }
     })

@@ -1,19 +1,8 @@
 import React from "react";
 import { Link } from "@chakra-ui/react";
 import { trimAccount } from "utils/helpers";
-import { Input } from "@chakra-ui/react";
-
-const AddressCell = ({ value }: any) => {
-  return (
-    <Link
-      textDecoration="underline"
-      href={`https://etherscan.io/address/${value}`}
-      target="_blank"
-    >
-      {trimAccount(value)}
-    </Link>
-  );
-};
+import AddressCell from "./AddressCell";
+import Category from "./Category";
 
 const columns = () => [
   {
@@ -47,13 +36,7 @@ const columns = () => [
   {
     Header: "Category",
     accessor: "category",
-    Cell: () => (
-      <Input
-        w={60}
-        onBlur={() => console.log("mandando")}
-        placeholder="Add category..."
-      />
-    ),
+    Cell: ({ value }: any) => <Category value={value} />,
   },
 ];
 

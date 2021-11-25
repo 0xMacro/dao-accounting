@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import CustomTable from "components/CustomTable";
-import columns from "./transactionsColumnData";
+import columns from "./transactionColumnData";
 import { Transaction } from "types";
 
 type TransactionTableProps = {

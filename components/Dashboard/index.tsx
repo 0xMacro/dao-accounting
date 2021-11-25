@@ -11,7 +11,7 @@ import { fixUpTransactionData, trimAccount } from "utils/helpers";
 
 const provider = new ethers.providers.EtherscanProvider();
 
-const Dashboard = ({ categories }: any) => {
+const Dashboard = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isFirstRender, setIsFirstRender] = useState(true);
   const [inputAccount, setInputAccount] = useState("");
@@ -35,10 +35,19 @@ const Dashboard = ({ categories }: any) => {
             position: "top",
           });
         }
-        const cleanTransactions = fixUpTransactionData(txList, _account);
+
+        const response = await fetch(`/api/getCategories/${_account}`);
+        const { categories } = await response.json();
+
+        const cleanTransactions = fixUpTransactionData(
+          txList,
+          _account,
+          categories
+        );
 
         setTransactions(cleanTransactions);
       } catch (_e) {
+        console.log(_e);
         toast({
           title: "Please enter a valid address.",
           status: "error",

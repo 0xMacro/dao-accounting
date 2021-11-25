@@ -33,8 +33,7 @@ export default withSessionRoute(async function handler(req, res) {
   //Upsert user and set session variables
   createOrUpdateUser(account);
 
-  // req.session.connectedAddress = req.body.account;
-  req.session.connectedAddress = req.body.account;
+  req.session.connectedAddress = account;
   await req.session.save();
   res.status(200).json({ status: 1 });
 });
@@ -42,7 +41,7 @@ export default withSessionRoute(async function handler(req, res) {
 const getNonce = async (address: string) => {
   const dbResponse = await prisma.users.findFirst({
     where: {
-      address,
+      address: address.toLowerCase(),
     },
     select: {
       nonce: true,
@@ -61,7 +60,7 @@ const createOrUpdateUser = async (address: string) => {
       nonce,
     },
     create: {
-      address,
+      address: address.toLowerCase(),
       nonce,
     },
   });

@@ -8,13 +8,16 @@ datasource db {
 }
 
 model categories {
-  hash    String @id(map: "categories_pk") @db.VarChar
-  address String @db.VarChar
+  id      Int    @id(map: "categories_pk") @default(autoincrement())
+  user_id Int
+  hash    String @db.VarChar
   name    String @db.VarChar
+  users   users  @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "categories_fk")
 }
 
 model users {
-  id      Int     @id(map: "users_pk") @default(autoincrement())
-  address String  @unique(map: "users_un") @db.VarChar
-  nonce   Decimal @db.Decimal
+  id         Int          @id(map: "users_pk") @default(autoincrement())
+  address    String       @unique(map: "users_un") @db.VarChar
+  nonce      Decimal      @db.Decimal
+  categories categories[]
 }

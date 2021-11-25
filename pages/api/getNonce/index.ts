@@ -4,7 +4,7 @@ export default async function handler(req, res) {
   const address = req.query.address;
   const dbResponse = await prisma.users.findFirst({
     where: {
-      address,
+      address: address.toLowerCase(),
     },
     select: {
       nonce: true,

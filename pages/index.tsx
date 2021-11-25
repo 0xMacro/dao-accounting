@@ -8,7 +8,7 @@ export default function App({ categories, connectedAddress }) {
   return (
     <ConnectedAddressProvider initialState={connectedAddress}>
       <Layout>
-        <Dashboard categories={categories} />
+        <Dashboard />
       </Layout>
     </ConnectedAddressProvider>
   );
@@ -16,9 +16,8 @@ export default function App({ categories, connectedAddress }) {
 
 export const getServerSideProps = withSessionSsr(async ({ req }) => {
   const connectedAddress = req.session.connectedAddress || null;
-  const categories = await prisma.categories.findMany();
 
   return {
-    props: { categories, connectedAddress },
+    props: { connectedAddress },
   };
 });
