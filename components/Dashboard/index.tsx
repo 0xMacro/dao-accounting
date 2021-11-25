@@ -30,7 +30,7 @@ const Dashboard = () => {
         if (txList.length === 0) {
           return toast({
             title: `No transactions found for ${trimAccount(_account)}`,
-            status: "error",
+            status: "info",
             duration: 5000,
             isClosable: true,
             position: "top",
