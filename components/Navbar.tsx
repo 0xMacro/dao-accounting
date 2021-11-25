@@ -7,7 +7,9 @@ import { useEffect } from "react";
 import { signTransaction } from "utils/auth";
 
 const Navbar = () => {
-  const sessionAddress = useContext(ConnectedAddressContext);
+  const [sessionAddress, setSessionAddress] = useContext(
+    ConnectedAddressContext
+  );
   const { library, active, account, activateBrowserWallet } = useEthers();
   const [connectedWallet, setConnectedWallet] = useState(account);
 
@@ -15,8 +17,10 @@ const Navbar = () => {
     activateBrowserWallet();
   };
 
-  const signInWallet = () => {
-    signTransaction(library!.getSigner(), account!);
+  const signInWallet = async () => {
+    await signTransaction(library!.getSigner(), account!);
+    setSessionAddress(account);
+    setConnectedWallet(account);
   };
 
   useEffect(() => {
@@ -26,13 +30,11 @@ const Navbar = () => {
   }, [account, active]);
 
   const handleSessionOnAccountChange = async () => {
-    console.log("METAMASK CONNECTED:", account);
-    console.log("LOCAL STATE:", connectedWallet);
-    console.log("SERVER SESSION:", sessionAddress);
-
     if (connectedWallet && account !== connectedWallet) {
       console.log("destroying session");
       await fetch("/api/destroySession");
+      setConnectedWallet("");
+      setSessionAddress("");
 
       if (active) {
         signInWallet();

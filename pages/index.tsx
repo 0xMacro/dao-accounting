@@ -1,4 +1,4 @@
-import ConnectedAddressContext from "../context/ConnectedAddressContext";
+import { ConnectedAddressProvider } from "../context/ConnectedAddressContext";
 import Dashboard from "../components/Dashboard";
 import Layout from "../components/Layout";
 import { prisma } from "../config/db";
@@ -6,11 +6,11 @@ import { withSessionSsr } from "../lib/withSession";
 
 export default function App({ categories, connectedAddress }) {
   return (
-    <ConnectedAddressContext.Provider value={connectedAddress}>
+    <ConnectedAddressProvider initialState={connectedAddress}>
       <Layout>
         <Dashboard categories={categories} />
       </Layout>
-    </ConnectedAddressContext.Provider>
+    </ConnectedAddressProvider>
   );
 }
 
