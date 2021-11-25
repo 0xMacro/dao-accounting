@@ -15,6 +15,6 @@ model categories {
 
 model users {
   id      Int     @id(map: "users_pk") @default(autoincrement())
-  address String  @db.VarChar
+  address String  @unique(map: "users_un") @db.VarChar
   nonce   Decimal @db.Decimal
 }

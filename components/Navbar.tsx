@@ -3,24 +3,17 @@ import { Flex, Box, Button, Text } from "@chakra-ui/react";
 import { useEthers } from "@usedapp/core";
 import { trimAccount } from "../utils/helpers";
 import { useEffect } from "react";
+import { signTransaction } from "utils/auth";
 
 const Navbar = () => {
-  const { active, account, activateBrowserWallet } = useEthers();
+  const { library, active, account, activateBrowserWallet } = useEthers();
 
   const handleWalletConnect = async () => {
     activateBrowserWallet();
   };
 
   const signInWallet = () => {
-    fetch("/api/signin", {
-      method: "POST",
-      body: JSON.stringify({
-        account,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    signTransaction(library!.getSigner(), account!);
   };
 
   useEffect(() => {
