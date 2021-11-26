@@ -58,15 +58,21 @@ const Category = ({ value, inputAccount, hash }: any) => {
     }
   };
 
+  const isInputEqualToConnected = () => {
+    return inputAccount.toLowerCase() === account?.toLowerCase();
+  };
+
   return (
     <Loading align="left" size="lg" isLoading={isLoading}>
       <Input
-        readOnly={inputAccount.toLowerCase() !== account?.toLowerCase()}
+        readOnly={!isInputEqualToConnected()}
         w={60}
         value={categoryName}
         onChange={handleChangeCategory}
         onBlur={handleSaveCategory}
-        placeholder="Add category..."
+        placeholder={
+          isInputEqualToConnected() ? "Add category..." : "No category"
+        }
       />
     </Loading>
   );
