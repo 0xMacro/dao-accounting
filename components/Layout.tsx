@@ -10,7 +10,12 @@ export default function Layout({ children }: LayoutProps) {
   return (
     <>
       <Navbar />
-      <Box p={{ base: 5, sm: 10 }} bg="gray.700" w="full">
+      <Box
+        py={{ base: 6, sm: 10 }}
+        px={{ base: 2, sm: 10 }}
+        bg="gray.700"
+        w="full"
+      >
         {children}
       </Box>
     </>

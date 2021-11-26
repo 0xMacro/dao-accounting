@@ -34,7 +34,7 @@ const CustomTable = ({ columns, data, inputAccount }: CustomTableProps) => {
   );
 
   return (
-    <Flex direction="column" w={{ base: "100%", lg: "75%" }}>
+    <Flex mx="auto" direction="column" w={{ base: "100%", xl: "75%" }}>
       <Flex maxWidth="100%" overflow="auto">
         <Table {...getTableProps()}>
           <Thead>
