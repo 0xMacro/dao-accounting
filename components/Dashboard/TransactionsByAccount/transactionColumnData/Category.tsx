@@ -14,6 +14,13 @@ const Category = ({ value, inputAccount, hash }: any) => {
     setCategoryName(e.target.value);
   };
 
+  const handleKeyPress = (e: any) => {
+    if (e.keyCode === 13) {
+      setCategoryName(e.target.value);
+      handleSaveCategory();
+    }
+  };
+
   const handleSaveCategory = async () => {
     const category = categoryName?.trim();
     if (category && category !== value?.name) {
@@ -69,7 +76,7 @@ const Category = ({ value, inputAccount, hash }: any) => {
         w={60}
         value={categoryName}
         onChange={handleChangeCategory}
-        onBlur={handleSaveCategory}
+        onKeyUp={handleKeyPress}
         placeholder={
           isInputEqualToConnected() ? "Add category..." : "No category"
         }
