@@ -1,4 +1,5 @@
 import React from "react";
+import { theme } from "@chakra-ui/theme";
 import { Transaction } from "types";
 import {
   BarChart,
@@ -63,9 +64,9 @@ const data = [
 const TransactionsChartView = ({ transactions }: ChartProps) => {
   return (
     <BarChart
-      width={500}
-      height={300}
-      data={data}
+      width={1000}
+      height={500}
+      data={transactions}
       margin={{
         top: 5,
         right: 30,
@@ -73,14 +74,12 @@ const TransactionsChartView = ({ transactions }: ChartProps) => {
         bottom: 5,
       }}
     >
-      <CartesianGrid strokeDasharray="3 3" />
       <XAxis dataKey="name" />
       <YAxis />
       <Tooltip />
-      <Legend />
+      <Legend  />
       <ReferenceLine y={0} stroke="#000" />
-      <Bar dataKey="pv" fill="#8884d8" />
-      <Bar dataKey="uv" fill="#82ca9d" />
+      <Bar dataKey="value" fill={theme.colors.green[500]} />
     </BarChart>
   );
 };
