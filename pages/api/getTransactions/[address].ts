@@ -1,6 +1,6 @@
 import { withSessionRoute } from "../../../lib/withSession";
 import { trimAccount } from "../../../utils/helpers";
-import { Transaction, Category } from "../../../types";
+import { Category } from "../../../types";
 import { ethers } from "ethers";
 import { getCategoriesFromDB } from "../../../utils/backendFunctions";
 

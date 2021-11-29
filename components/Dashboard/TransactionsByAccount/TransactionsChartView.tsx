@@ -1,7 +1,6 @@
 import React from "react";
 import { Box } from "@chakra-ui/react";
 import { theme } from "@chakra-ui/theme";
-import { Transaction } from "types";
 import {
   BarChart,
   Bar,
@@ -21,7 +20,7 @@ type ChartProps = {
 const TransactionsChartView = ({ monthlyTotal }: ChartProps) => {
   return (
     <Box width={1000} maxW="100%" overflow="auto">
-      <ResponsiveContainer width="100%" height={500}>
+      <ResponsiveContainer width="100%" height={600}>
         <BarChart
           data={monthlyTotal}
           margin={{
