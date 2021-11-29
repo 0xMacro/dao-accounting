@@ -55,7 +55,7 @@ const getNonce = async (address: string) => {
 const createOrUpdateUser = async (address: string) => {
   const nonce = Math.floor(Math.random() * Number.MAX_SAFE_INTEGER) + 1;
   const user = await prisma.users.upsert({
-    where: { address },
+    where: { address: address.toLowerCase() },
     update: {
       nonce,
     },
