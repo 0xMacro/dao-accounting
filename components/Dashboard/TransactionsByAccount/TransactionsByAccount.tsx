@@ -7,11 +7,13 @@ import TransactionsChartView from "./TransactionsChartView";
 
 type TransactionsByAccountProps = {
   transactions: (Transaction | undefined)[];
+  monthlyTotal: any;
   inputAccount: string;
 };
 
 const TransactionsByAccount = ({
   transactions,
+  monthlyTotal,
   inputAccount,
 }: TransactionsByAccountProps) => {
   return (
@@ -28,7 +30,7 @@ const TransactionsByAccount = ({
           />
         </TabPanel>
         <TabPanel>
-          <TransactionsChartView transactions={transactions} />
+          <TransactionsChartView monthlyTotal={monthlyTotal} />
         </TabPanel>
       </TabPanels>
     </Tabs>

@@ -1,4 +1,4 @@
-import { prisma } from "../../../config/db";
+import { getCategoriesFromDB } from "../../../utils/backendFunctions";
 
 export default async function handler(req, res) {
   if (req.method !== "GET") {
@@ -7,32 +7,7 @@ export default async function handler(req, res) {
 
   const queriedAddress = req.query.address;
 
-  const userQueryResponse = await prisma.users.upsert({
-    where: {
-      address: queriedAddress.toLowerCase() as string,
-    },
-    create: {
-      address: queriedAddress.toLowerCase(),
-      nonce: Math.floor(Math.random() * Number.MAX_SAFE_INTEGER) + 1,
-    },
-    update: {},
-  });
+  const categories = await getCategoriesFromDB(queriedAddress);
 
-  const id = userQueryResponse?.id;
-
-  if (!id) {
-    return res.status(200).json({ status: 1, categories: [] });
-  }
-
-  const categoriesResponse = await prisma.categories.findMany({
-    where: {
-      user_id: id,
-    },
-    select: {
-      name: true,
-      hash: true,
-    },
-  });
-
-  return res.status(200).json({ status: 1, categories: categoriesResponse });
+  return res.status(200).json({ status: 1, categories });
 }

@@ -1,15 +1,12 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { useToast } from "@chakra-ui/react";
-import { ethers } from "ethers";
 import { Transaction } from "types";
 import { Box } from "@chakra-ui/react";
 import SearchBar from "./SearchBar/SearchBar";
 import TransactionsByAccount from "./TransactionsByAccount/TransactionsByAccount";
 import { useEthers } from "@usedapp/core";
 import Loading from "components/Loading";
-import { fixUpTransactionData, trimAccount } from "utils/helpers";
-
-const provider = new ethers.providers.EtherscanProvider();
+import { monthlyTotalToNumber, trimAccount } from "utils/helpers";
 
 const Dashboard = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -18,6 +15,8 @@ const Dashboard = () => {
   const [transactions, setTransactions] = useState<(Transaction | undefined)[]>(
     []
   );
+  const [monthlyTotal, setMonthlyTotal] = useState({});
+
   const { account } = useEthers();
   const toast = useToast();
 
@@ -27,8 +26,10 @@ const Dashboard = () => {
       setIsLoading(true);
       setTransactions([]);
       try {
-        const txList = await provider.getHistory(_account);
-        if (txList.length === 0) {
+        const data = await fetch(`/api/getTransactions/${_account}`);
+        const transactionResponse = await data.json();
+
+        if (!transactionResponse.status) {
           return toast({
             title: `No transactions found for ${trimAccount(_account)}`,
             status: "info",
@@ -38,12 +39,10 @@ const Dashboard = () => {
           });
         }
 
-        const response = await fetch(`/api/getCategories/${_account}`);
-        const { categories } = await response.json();
-
-        const cleanTransactions = fixUpTransactionData(txList, categories);
-
-        setTransactions(cleanTransactions);
+        setTransactions(transactionResponse.transactions.txList);
+        setMonthlyTotal(
+          monthlyTotalToNumber(transactionResponse.transactions.monthlyTotal)
+        );
       } catch (_e) {
         console.log(_e);
         toast({
@@ -76,6 +75,7 @@ const Dashboard = () => {
           <TransactionsByAccount
             inputAccount={inputAccount}
             transactions={transactions}
+            monthlyTotal={monthlyTotal}
           />
         ) : null}
       </Loading>
