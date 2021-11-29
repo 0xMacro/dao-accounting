@@ -29,7 +29,10 @@ const Dashboard = () => {
         const data = await fetch(`/api/getTransactions/${_account}`);
         const transactionResponse = await data.json();
 
-        if (!transactionResponse.status) {
+        if (
+          !transactionResponse?.status ||
+          transactionResponse?.transactions?.txList?.length === 0
+        ) {
           return toast({
             title: `No transactions found for ${trimAccount(_account)}`,
             status: "info",
