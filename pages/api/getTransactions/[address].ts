@@ -3,30 +3,65 @@ import { trimAccount } from "../../../utils/helpers";
 import { Category } from "../../../types";
 import { ethers } from "ethers";
 import { getCategoriesFromDB } from "../../../utils/backendFunctions";
+import { prisma } from "../../../config/db";
 
 export default withSessionRoute(async function handler(req, res) {
-  const account = req.query.address;
+  const account = req.query.address as string;
+  const categories = await getCategoriesFromDB(account);
 
-  const etherscanResponse = await fetch(
-    `https://api.etherscan.io/api?module=account&action=txlist&address=${account}&sort=desc&apiKey=${process.env.ETHERSCAN_API_KEY}`
+  const { latestRegisteredBlock, latestBlock } = await getLatestBlocks(account);
+
+  const shouldFetchAgain = await needsToFetchNewTransactions(
+    latestBlock,
+    latestRegisteredBlock
   );
-  const data = await etherscanResponse.json();
-  const txList = data.result;
 
-  if (txList.length === 0) {
-    return res.status(400).json({
-      status: 0,
-      message: `No transactions found for ${trimAccount(account as string)}`,
+  let transactions;
+
+  // Checks if should return the cached transactions or fetch again
+  if (!shouldFetchAgain) {
+    const cachedTransactions = await getCachedTransactions(account);
+    transactions = mapCategoriesAndMonthlyDataToCachedTransactions(
+      account,
+      cachedTransactions,
+      categories
+    );
+  } else {
+    const etherscanResponse = await fetch(
+      `https://api.etherscan.io/api?module=account&action=txlist&address=${account}&sort=desc&startblock=${
+        parseInt(latestRegisteredBlock) + 1 || 0
+      }&apiKey=${process.env.ETHERSCAN_API_KEY}`
+    );
+    console.log(etherscanResponse);
+    const data = await etherscanResponse.json();
+    const txList = data.result;
+
+    if (txList.length === 0) {
+      return res.status(400).json({
+        status: 0,
+        message: `No transactions found for ${trimAccount(account)}`,
+      });
+    }
+
+    transactions = transactionsToTable(account, txList, categories);
+
+    await prisma.transactions.createMany({
+      data: transactions.txList,
+    });
+
+    await prisma.last_seen_blocks.upsert({
+      where: {
+        address: account.toLowerCase(),
+      },
+      update: {
+        last_seen_block_number: latestBlock,
+      },
+      create: {
+        address: account.toLowerCase(),
+        last_seen_block_number: latestBlock,
+      },
     });
   }
-
-  const categories = await getCategoriesFromDB(account as string);
-
-  const transactions = transactionsToTable(
-    account as string,
-    txList,
-    categories
-  );
 
   return res.status(200).json({ status: 1, transactions });
 });
@@ -39,7 +74,7 @@ export const transactionsToTable = (
   const monthlyTotal = [];
 
   const txList = transactions
-    .map((tx, i) => {
+    .map((tx) => {
       const valueAsBigNumber = ethers.BigNumber.from(tx.value);
       if (valueAsBigNumber.gt(0) && tx.to) {
         getMonthDataFromTimestamp(account, valueAsBigNumber, tx, monthlyTotal);
@@ -58,7 +93,80 @@ export const transactionsToTable = (
   return { txList, monthlyTotal };
 };
 
-// Internal
+// Internal helpers
+
+const needsToFetchNewTransactions = async (
+  latestBlock,
+  latestRegisteredBlock
+) => {
+  return (
+    !latestRegisteredBlock ||
+    !latestBlock ||
+    latestBlock !== latestRegisteredBlock
+  );
+};
+
+const mapCategoriesAndMonthlyDataToCachedTransactions = (
+  account,
+  transactions,
+  categories
+) => {
+  const monthlyTotal = [];
+
+  const txList = transactions.map((tx) => {
+    const valueAsBigNumber = ethers.utils.parseEther(tx.value);
+    getMonthDataFromTimestamp(account, valueAsBigNumber, tx, monthlyTotal);
+
+    return {
+      ...tx,
+      address: tx.address,
+      category: categories.find((category) => category.hash === tx.hash),
+    };
+  });
+
+  return { txList, monthlyTotal };
+};
+
+const getLatestBlocks = async (account) => {
+  const etherscanResponse = await fetch(
+    `https://api.etherscan.io/api?module=account&action=txlist&address=${account}&page=1&offset=1&sort=desc&apiKey=${process.env.ETHERSCAN_API_KEY}`
+  );
+  const data = await etherscanResponse.json();
+  const latestTransaction = data.result;
+  const latestBlock = latestTransaction[0]?.blockNumber;
+
+  const latestRegisteredBlock = await getLatestRegisteredBlock(account);
+
+  return { latestRegisteredBlock, latestBlock };
+};
+
+const getLatestRegisteredBlock = async (account) => {
+  const dbResponse = await prisma.last_seen_blocks.findUnique({
+    where: {
+      address: account.toLowerCase(),
+    },
+    select: {
+      last_seen_block_number: true,
+    },
+  });
+
+  return dbResponse?.last_seen_block_number;
+};
+
+const getCachedTransactions = async (account) => {
+  return await prisma.transactions.findMany({
+    where: {
+      OR: [
+        {
+          from: account.toLowerCase(),
+        },
+        {
+          to: account.toLowerCase(),
+        },
+      ],
+    },
+  });
+};
 
 const getMonthDataFromTimestamp = (account, value, tx, monthlyTotal) => {
   let dateObj = new Date(tx.timeStamp * 1000);

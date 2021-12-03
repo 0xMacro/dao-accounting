@@ -15,9 +15,23 @@ model categories {
   users   users  @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "categories_fk")
 }
 
+model transactions {
+  id    Int    @id(map: "transactions_pk") @default(autoincrement())
+  hash  String @db.VarChar
+  from  String @db.VarChar
+  to    String @db.VarChar
+  value String @db.VarChar
+}
+
 model users {
   id         Int          @id(map: "users_pk") @default(autoincrement())
   address    String       @unique(map: "users_un") @db.VarChar
   nonce      Decimal      @db.Decimal
   categories categories[]
+}
+
+model last_seen_blocks {
+  id                     Int    @id(map: "last_seen_blocks_pk") @default(autoincrement())
+  address                String @unique(map: "last_seen_blocks_un") @db.VarChar
+  last_seen_block_number String @db.VarChar
 }
