@@ -32,7 +32,6 @@ export default withSessionRoute(async function handler(req, res) {
         parseInt(latestRegisteredBlock) + 1 || 0
       }&apiKey=${process.env.ETHERSCAN_API_KEY}`
     );
-    console.log(etherscanResponse);
     const data = await etherscanResponse.json();
     const txList = data.result;
 
@@ -84,6 +83,7 @@ export const transactionsToTable = (
           from: tx.from,
           to: tx.to,
           value: ethers.utils.formatEther(valueAsBigNumber),
+          timestamp: tx.timeStamp,
           category: categories.find((category) => category.hash === tx.hash),
         };
       }
@@ -155,6 +155,9 @@ const getLatestRegisteredBlock = async (account) => {
 
 const getCachedTransactions = async (account) => {
   return await prisma.transactions.findMany({
+    orderBy: {
+      timestamp: "desc",
+    },
     where: {
       OR: [
         {

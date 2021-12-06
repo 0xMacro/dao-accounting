@@ -16,11 +16,12 @@ model categories {
 }
 
 model transactions {
-  id    Int    @id(map: "transactions_pk") @default(autoincrement())
-  hash  String @db.VarChar
-  from  String @db.VarChar
-  to    String @db.VarChar
-  value String @db.VarChar
+  id        Int    @id(map: "transactions_pk") @default(autoincrement())
+  hash      String @db.VarChar
+  from      String @db.VarChar
+  to        String @db.VarChar
+  value     String @db.VarChar
+  timestamp String @db.VarChar
 }
 
 model users {
