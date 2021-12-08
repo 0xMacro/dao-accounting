@@ -172,7 +172,7 @@ const getCachedTransactions = async (account) => {
 };
 
 const getMonthDataFromTimestamp = (account, value, tx, monthlyTotal) => {
-  let dateObj = new Date(tx.timeStamp * 1000);
+  let dateObj = new Date((tx.timeStamp || tx.timestamp) * 1000);
   let month = dateObj.toLocaleString("en-us", {
     month: "long",
     year: "numeric",
